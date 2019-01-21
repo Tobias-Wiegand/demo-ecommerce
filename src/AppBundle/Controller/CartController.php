@@ -122,15 +122,19 @@ class CartController extends AbstractCartAware
                         $trackingManager = Factory::getInstance()->getTrackingManager();
                         $trackingManager->trackCartProductActionRemove($cart, $product, $this->getCart()->getItem($key)->getCount());
                     }
+					if (intval($qty) == 0) {
+					$cart->removeItem($key);
+					}
+					else{
                     $cart->updateItem($key, $product, intval($qty), true);
+					}
                     $cart->save();
-                }
+					}
             }
         }
 
         return $this->redirect($this->generateUrl('cart', ['action' => 'list']));
     }
-
     /**
      * Adds a voucher token to cart, sets error messages and
      * redirects to list action.
